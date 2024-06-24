@@ -12,47 +12,40 @@ router.get('/', async (req, res, next) => {
 router.get("/:id", async (req, res, next) => {
     // Step 1: extract path parameters from request object
     const params = req.params;
-    const userId = params.id;
+    const movieId = params.id;
 
     // Step 2: find user in db
-    const user = await db.user.findUnique({where : {id : +userId}});
+    const movie = await db.movie.findUnique({where : {id : +movieId}});
     
-    // Step 3: check if user is in db
+    // Step 3: check if movie is in db
     // if not found
-    if (!user) return res.status(404).json({message: 'user not found'});
+    if (!movie) return res.status(404).json({message: 'movie not found'});
     // if found
-    return res.json(user);
+    return res.json(movie);
 })
 
-router.post("/users", async (req, res, next) => {
+router.post("/", async (req, res, next) => {
     
-    const { email, name, password, confirmPassword, isAdmin = false } = req.body;
+    const { title, description, image, releaseDate, genre, rating, duration } = req.body;
 
     // Step 1: validate
-    if (!email || !name || !password || !confirmPassword) {
+    if (!title || !description || !image || !releaseDate || !genre || !rating || !duration) {
         res.status(400).json({ message: 'All fields required' });
     }
 
-    if (password !== confirmPassword) {
-        res.status(400).json({ message: 'password mismatch' });
-    }
-
-    // HW: Check whether email is already registered
-    const user = await db.user.findUnique({where : {email : email}});
-    if (user) { // user is not null/undefined, so the email is registered already
-        return res.status(400).json({ message: 'email already registered' });
-    }
-
     // Step 2: create new ser
-    const newUser = await db.user.create({
+    const newMovie = await db.user.create({
         data: {
-            email: email,
-            name: name,
-            password: password,
-            isAdmin: isAdmin
+            title: title,
+            description: description,
+            image: image,
+            releaseDate: releaseDate,
+            genre: genre,
+            rating: rating,
+            duration: duration
         }
     })
-    res.status(201).json(newUser);
+    res.status(201).json(newMovie);
 });
 
 export default router;
