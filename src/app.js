@@ -2,6 +2,7 @@ import 'dotenv/config';
 import express from 'express';
 import db from './prisma-client.js'
 import usersRoute from './router/user-route.js'
+import moviesRoute from './router/movie-route.js'
 
 const PORT = process.env.PORT;
 const app = express();
@@ -13,6 +14,7 @@ app.get('/', (req, res) => {
   return res.json({ message: 'Hi' });
 });
 
+app.use('/movies', moviesRoute)
 app.use('/users', usersRoute);
 // GET /users
 // app.get("/users", async (req, res, next) => {

@@ -1,14 +1,12 @@
 import express from 'express';
 import db from '../prisma-client.js'
 
-// set up router
 const router = express.Router();
 
-// router works like 'app'
 router.get('/', async (req, res, next) => {
     // find users in db
-    const users = await db.user.findMany();
-    return res.json(users);
+    const movies = await db.movie.findMany();
+    return res.json(movies);
 });
 
 router.get("/:id", async (req, res, next) => {
@@ -26,7 +24,7 @@ router.get("/:id", async (req, res, next) => {
     return res.json(user);
 })
 
-router.post("/", async (req, res, next) => {
+router.post("/users", async (req, res, next) => {
     
     const { email, name, password, confirmPassword, isAdmin = false } = req.body;
 
